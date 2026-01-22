@@ -1,0 +1,47 @@
+{
+  "name": "scenario-explorer-sample",
+  "private": true,
+  "description": "Code sample: Scenario Explorer list view with CSS Grid/Subgrid, Zustand state management, and MUI theming",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:main": "pnpm --filter main dev",
+    "lint": "turbo run lint",
+    "check-types": "turbo run check-types",
+    "format": "prettier . --write --ignore-unknown --cache",
+    "format:check": "prettier . --check --ignore-unknown --cache",
+    "clean:turbo": "rm -rf .turbo/cache",
+    "clean:next": "rm -rf apps/*/.next/cache",
+    "clean:ts": "find . -name '*.tsbuildinfo' -type f -delete",
+    "clean:caches": "pnpm clean:turbo && pnpm clean:next && pnpm clean:ts",
+    "clean:all": "rm -rf node_modules .turbo apps/*/.next",
+    "reset": "pnpm clean:all && pnpm install",
+    "qa": "pnpm lint && pnpm check-types && pnpm turbo run build"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sass": "^1.86.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "eslint": "^9.39.2",
+    "prettier": "^3.5.3",
+    "turbo": "^2.7.5",
+    "typescript": "5.8.2"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": "22.x"
+  },
+  "pnpm": {
+    "overrides": {
+      "js-yaml": "^4.1.1",
+      "tmp": "^0.2.4",
+      "diff": "^8.0.3",
+      "brace-expansion": "^2.0.1"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/components/index.ts",
+    "./themes/ThemeRegistry": "./src/themes/ThemeRegistry.tsx",
+    "./themes/theme": "./src/themes/theme.tsx",
+    "./mui": "./src/mui-components.tsx",
+    "./hooks": "./src/hooks/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "generate:component": "turbo gen react-component",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "peerDependencies": {
+    "@types/node": ">=22.13.10",
+    "@types/react": ">=19.0.10",
+    "@types/react-dom": ">=19.0.4",
+    "eslint": ">=9.22.0",
+    "react": ">=19",
+    "react-dom": ">=19",
+    "typescript": ">=5.8.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@turbo/gen": "^2.7.5"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.1",
+    "@mui/material": "^7.0.1",
+    "@mui/material-nextjs": "^7.3.7",
+    "@mui/system": "^7.3.2",
+    "@repo/motion": "workspace:*",
+    "@repo/viz": "workspace:*",
+    "immer": "^10.1.1",
+    "zustand": "^5.0.3"
+  },
+  "sideEffects": false
+}

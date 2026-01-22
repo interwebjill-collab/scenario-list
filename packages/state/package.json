@@ -1,0 +1,31 @@
+{
+  "name": "@repo/state",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./drawer": {
+      "import": "./src/drawer/index.ts",
+      "types": "./src/drawer/index.ts"
+    },
+    "./zustand": {
+      "import": "./src/zustand/index.ts",
+      "types": "./src/zustand/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "lint": "pnpm exec eslint . --config=eslint.config.mjs",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "^9.15.0"
+  },
+  "dependencies": {
+    "immer": "^10.1.1",
+    "zustand": "^5.0.3"
+  }
+}

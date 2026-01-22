@@ -1,0 +1,372 @@
+"use client"
+
+/**
+ * ScenarioRow - Row layout for scenario summaries in grids/lists
+ *
+ * Composes shared primitives into a row format suitable for explore grids.
+ * Used in Explore mode (StrategyGrid, ListView).
+ *
+ * Features:
+ * - Checkbox for selection
+ * - Compact and expanded layouts
+ * - Outcome glyph rendering
+ * - Optional summary expansion
+ */
+
+import {
+  Box,
+  Checkbox,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@repo/ui/mui"
+import { StrategyHeader } from "./shared/StrategyHeader"
+import { OperationsIconGroup } from "./shared/OperationsIconGroup"
+import { OutcomeGlyphItem } from "./shared/OutcomeGlyphItem"
+import type { ChartDataPoint } from "./shared/types"
+import type { ScenarioTheme } from "../../../content/scenarios"
+
+// =============================================================================
+// Types
+// =============================================================================
+
+export interface ScenarioRowProps {
+  /** Scenario data */
+  scenario: {
+    scenarioId: string
+    label: string
+    description: string
+    theme?: ScenarioTheme
+  }
+  /** Chart data for outcomes (keyed by display name) */
+  chartData: Record<string, ChartDataPoint[]>
+  /** Outcome names in display order */
+  outcomeNames: Array<{ name: string; displayName: string }>
+  /** Whether this row is selected (checkbox checked) */
+  isSelected?: boolean
+  /** Whether this row is highlighted (search match) */
+  isHighlighted?: boolean
+  /** Whether to show in compact mode */
+  compact?: boolean
+  /** Whether to show descriptions */
+  showDefinitions?: boolean
+  /** Currently expanded outcome for summary (null if none) */
+  expandedOutcome?: string | null
+  /** Active tooltip outcome */
+  activeTooltip?: string | null
+  /** Sort state */
+  sortBy?: string | null
+  sortDirection?: "asc" | "desc"
+  /** Callbacks */
+  onToggleSelect?: () => void
+  onOutcomeClick?: (outcome: string) => void
+  onOutcomeInfoClick?: (
+    outcome: string,
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => void
+  onSortChange?: (outcome: string | null, direction: "asc" | "desc") => void
+  /** Icon size */
+  iconSize?: "sm" | "md" | "lg"
+}
+
+// =============================================================================
+// Component
+// =============================================================================
+
+export function ScenarioRow({
+  scenario,
+  chartData,
+  outcomeNames,
+  isSelected = false,
+  isHighlighted = false,
+  compact = false,
+  showDefinitions = true,
+  expandedOutcome,
+  activeTooltip,
+  sortBy,
+  sortDirection = "asc",
+  onToggleSelect,
+  onOutcomeClick,
+  onOutcomeInfoClick,
+  onSortChange,
+  iconSize = "md",
+}: ScenarioRowProps) {
+  const theme = useTheme()
+
+  // Responsive glyph size
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"))
+  const glyphSize = isMdUp ? 60 : 50
+
+  // Helper to check if outcome has valid data
+  const hasData = (outcome: string): boolean => {
+    const tierData = chartData[outcome]
+    return (
+      tierData !== undefined &&
+      tierData.length > 0 &&
+      tierData.some((tier) => tier.value > 0)
+    )
+  }
+
+  // Render single outcome item
+  const renderOutcomeItem = (displayName: string, name: string) => {
+    const isActive = hasData(displayName)
+    const isOutcomeSelected = expandedOutcome === displayName
+    const isSorted = sortBy === displayName
+
+    return (
+      <OutcomeGlyphItem
+        key={displayName}
+        displayName={displayName}
+        name={name}
+        chartData={chartData[displayName]}
+        isActive={isActive}
+        isSelected={isOutcomeSelected}
+        isTooltipActive={activeTooltip === name}
+        size={glyphSize}
+        showLabel={true}
+        showInfoButton={true}
+        showSortButton={!!onSortChange}
+        sortState={isSorted ? sortDirection : null}
+        onGlyphClick={() => {
+          if (isActive && onOutcomeClick) {
+            onOutcomeClick(displayName)
+          }
+        }}
+        onInfoClick={(e) => onOutcomeInfoClick?.(name, e)}
+        onSortToggle={(newState) => {
+          if (newState === null) {
+            onSortChange?.(null, "asc")
+          } else {
+            onSortChange?.(displayName, newState)
+          }
+        }}
+      />
+    )
+  }
+
+  return (
+    <>
+      {/* Main row */}
+      <Box
+        sx={{
+          gridColumn: "1 / -1",
+          display: "grid",
+          gridTemplateColumns: compact
+            ? "32px 1fr"
+            : { xs: "subgrid", lg: "subgrid" },
+          backgroundColor: isHighlighted
+            ? theme.palette.common.white
+            : theme.palette.undertone.warm,
+          borderRadius: theme.borderRadius.md,
+          padding: compact
+            ? theme.space.component.xl
+            : theme.space.component.md,
+          gap: theme.space.gap.sm,
+          alignItems: compact ? "stretch" : "start",
+          transition: theme.transition.default,
+          border: isHighlighted ? theme.border.active : "2px solid transparent",
+          "&:hover": {
+            backgroundColor: theme.palette.background.paper,
+          },
+        }}
+      >
+        {/* Checkbox */}
+        {onToggleSelect && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              pointerEvents: "auto",
+              cursor: "pointer",
+              ...(compact && { gridRow: "1 / -1" }),
+            }}
+            onClick={(e) => {
+              e.stopPropagation()
+              onToggleSelect()
+            }}
+          >
+            <Checkbox
+              checked={isSelected}
+              onChange={() => {}}
+              sx={{
+                padding: 0,
+                margin: 0,
+                cursor: "pointer",
+                pointerEvents: "none",
+                position: "relative",
+                top: theme.spacing(0.125),
+                transform: "scale(0.9)",
+              }}
+            />
+          </Box>
+        )}
+
+        {/* Content: compact vs non-compact layout */}
+        {compact ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: theme.space.gap.md,
+            }}
+          >
+            {/* First row: Title/description + Key operations */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "stretch",
+                gap: theme.space.gap.lg,
+              }}
+            >
+              <StrategyHeader
+                strategy={scenario}
+                showDescription={showDefinitions}
+                titleVariant="body2"
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: theme.space.gap.md,
+                  flexShrink: 0,
+                }}
+              >
+                <Typography variant="subtitle2">Key operations</Typography>
+                <OperationsIconGroup
+                  scenarioId={scenario.scenarioId}
+                  theme={scenario.theme}
+                  size={iconSize}
+                />
+              </Box>
+            </Box>
+
+            {/* Key outcomes section */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: theme.space.gap.md,
+              }}
+            >
+              <Typography variant="subtitle2">Key outcomes</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: theme.space.gap.lg,
+                }}
+              >
+                {/* First 5 outcomes (multi-location) */}
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "repeat(3, 1fr)",
+                      sm: "repeat(5, 1fr)",
+                    },
+                    gap: theme.space.gap.sm,
+                  }}
+                >
+                  {outcomeNames
+                    .slice(0, 5)
+                    .map(({ name, displayName }) =>
+                      renderOutcomeItem(displayName, name),
+                    )}
+                </Box>
+                {/* Remaining outcomes (single-location) */}
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "repeat(3, 1fr)",
+                      sm: "repeat(5, 1fr)",
+                    },
+                    gap: theme.space.gap.sm,
+                  }}
+                >
+                  {outcomeNames
+                    .slice(5)
+                    .map(({ name, displayName }) =>
+                      renderOutcomeItem(displayName, name),
+                    )}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        ) : (
+          <>
+            {/* Non-compact: Strategy name and description */}
+            <Box sx={{ pr: 1 }}>
+              <StrategyHeader
+                strategy={scenario}
+                showDescription={showDefinitions}
+                titleVariant="body2"
+                descriptionMaxWidth="none"
+              />
+            </Box>
+
+            {/* Non-compact: Key operations */}
+            <OperationsIconGroup
+              scenarioId={scenario.scenarioId}
+              theme={scenario.theme}
+              size={iconSize}
+            />
+
+            {/* Non-compact: Outcome charts */}
+            <Box
+              sx={{
+                gridColumn: { xs: "1 / -1", lg: "auto" },
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "repeat(3, 1fr)",
+                  lg: "repeat(auto-fit, minmax(60px, 1fr))",
+                },
+                gap: theme.space.gap.sm,
+                mt: { xs: theme.space.component.lg, lg: 0 },
+                maxWidth: "100%",
+              }}
+            >
+              {outcomeNames.map(({ name, displayName }) =>
+                renderOutcomeItem(displayName, name),
+              )}
+            </Box>
+          </>
+        )}
+      </Box>
+
+      {/* Summary row (expanded) - placeholder */}
+      {expandedOutcome && (
+        <Box
+          sx={{
+            gridColumn: "1 / -1",
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "32px minmax(0, 1fr)",
+              lg: "32px minmax(0, 1fr)",
+            },
+            backgroundColor: theme.palette.grey[50],
+            borderRadius: theme.borderRadius.md,
+            padding: theme.space.component.md,
+            gap: theme.space.gap.sm,
+            mt: -0.5, // intentional overlap
+            mb: theme.space.component.xs,
+          }}
+        >
+          <Box /> {/* Spacer for checkbox column */}
+          <Box>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              {expandedOutcome} Summary
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Detailed outcome analysis would appear here.
+            </Typography>
+          </Box>
+        </Box>
+      )}
+    </>
+  )
+}
+
+export default ScenarioRow

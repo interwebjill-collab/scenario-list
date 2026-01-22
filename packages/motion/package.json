@@ -1,0 +1,49 @@
+{
+  "name": "@repo/motion",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./variants": {
+      "import": "./src/variants/index.ts",
+      "types": "./src/variants/index.ts"
+    },
+    "./hooks": {
+      "import": "./src/hooks/index.ts",
+      "types": "./src/hooks/index.ts"
+    },
+    "./components": {
+      "import": "./src/components/index.ts",
+      "types": "./src/components/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc --skipLibCheck",
+    "lint": "pnpm exec eslint . --config=eslint.config.mjs",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "peerDependencies": {
+    "@types/flubber": "^0.4.0",
+    "@types/node": ">=22.13.10",
+    "@types/react": ">=19.0.10",
+    "@types/react-dom": ">=19.0.4",
+    "eslint": ">=9.22.0",
+    "react": ">=19",
+    "react-dom": ">=19",
+    "typescript": ">=5.8.2",
+    "@repo/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "flubber": "^0.4.2",
+    "framer-motion": "^12.4.10"
+  }
+}

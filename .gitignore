@@ -1,0 +1,35 @@
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Turbo
+.turbo
+
+# Build Outputs
+.next/
+out/
+build
+dist
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.DS_Store
+*.pem
+
+# Documentation (developer notes)
+docs/
+
+# Archived code (unused files preserved outside version control)
+**/archive/
+**/_archive/

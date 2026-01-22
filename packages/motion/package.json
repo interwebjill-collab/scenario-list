@@ -35,8 +35,7 @@
     "eslint": ">=9.22.0",
     "react": ">=19",
     "react-dom": ">=19",
-    "typescript": ">=5.8.2",
-    "@repo/ui": "workspace:*"
+    "typescript": ">=5.8.2"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

@@ -66,7 +66,8 @@ export function ToggleSortButton({
 
   // Slightly smaller than InfoIconButton (1.2rem) since arrow icons are visually larger
   const iconSize = size === "small" ? "1rem" : "1.15rem"
-  const buttonSize = size === "small" ? 24 : 28
+  // WCAG 2.5.5: 44px minimum touch target on mobile
+  const buttonSize = size === "small" ? { xs: 44, sm: 24 } : { xs: 44, sm: 28 }
 
   // WCAG 4.1.2: Provide accessible name describing current state
   const ariaLabel =
@@ -86,19 +87,21 @@ export function ToggleSortButton({
         height: buttonSize,
         minWidth: buttonSize,
         minHeight: buttonSize,
-        // WCAG 1.4.11: Improved contrast - use grey[600] instead of grey[500]
+        // WCAG 1.4.11: Visible background and border for touch target
         backgroundColor: (theme: Theme) =>
           isSorted
-            ? `${theme.palette.blue.bright}20`
-            : `${theme.palette.grey[400]}15`,
+            ? `${theme.palette.blue.bright}25`
+            : { xs: `${theme.palette.grey[300]}40`, sm: `${theme.palette.grey[400]}15` },
+        border: (theme: Theme) => `1px solid ${theme.palette.grey[400]}`,
         color: (theme: Theme) =>
           isSorted ? theme.palette.blue.bright : theme.palette.grey[600],
         transition: (theme: Theme) => theme.transition.quick,
         "&:hover": {
           backgroundColor: (theme: Theme) =>
             isSorted
-              ? `${theme.palette.blue.bright}30`
-              : `${theme.palette.grey[500]}25`,
+              ? `${theme.palette.blue.bright}35`
+              : `${theme.palette.grey[500]}30`,
+          borderColor: (theme: Theme) => theme.palette.blue.bright,
           color: (theme: Theme) =>
             isSorted ? theme.palette.blue.darkest : theme.palette.grey[700],
         },

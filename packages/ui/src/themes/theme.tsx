@@ -1350,14 +1350,16 @@ const theme = createTheme({
             width: "0 !important",
             height: "0 !important",
           },
-          // Visually hide MUI's internal input element but keep it accessible
-          // Uses sr-only technique to maintain keyboard accessibility
+          // WCAG 2.5.5: Extend touch target to 44px on mobile while keeping visual size small
+          // The input extends beyond visual bounds to create larger touch area
           "& input[type='checkbox']": {
             position: "absolute",
-            width: "100%",
-            height: "100%",
-            top: 0,
-            left: 0,
+            // Center the 44px touch target around the 20px visual checkbox
+            width: "44px",
+            height: "44px",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             opacity: 0,
             margin: 0,
             padding: 0,

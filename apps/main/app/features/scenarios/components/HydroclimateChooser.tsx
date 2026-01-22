@@ -64,8 +64,8 @@ interface HydroclimateChooserProps {
   showTitle?: boolean
 }
 
-// Fixed icon size - no responsive shrinking needed
-const ICON_SIZE = "40px"
+// WCAG 2.5.5: 44px minimum touch target
+const ICON_SIZE = "44px"
 
 export function HydroclimateChooser({
   value = "historical",

@@ -8,7 +8,7 @@
  */
 
 import React from "react"
-import { Box, useTheme } from "@repo/ui/mui"
+import { Box, Typography, useTheme } from "@repo/ui/mui"
 import ListView from "./exploreView/ListView"
 import SearchBar from "./components/SearchBar"
 import { ViewModeControls } from "./components/ViewModeControls"
@@ -28,6 +28,26 @@ export default function ScenarioExplorer() {
         flexDirection: "column",
       }}
     >
+      {/* WCAG 1.3.1: Page must have an h1 heading */}
+      <Typography
+        component="h1"
+        variant="h4"
+        sx={{
+          // Visually hidden but accessible to screen readers
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: 0,
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+      >
+        Scenario Explorer
+      </Typography>
+
       {/* WCAG 1.3.1: Header landmark for search and controls */}
       <Box
         component="header"

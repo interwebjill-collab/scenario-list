@@ -191,11 +191,11 @@ export function FloatingGlossaryPanel({
   return (
     <>
       {/* WCAG 4.1.2: Panel with dialog role and proper ARIA attributes */}
+      {/* Note: aria-hidden removed as it's prohibited on dialog roles with focusable content */}
       <Box
         role="dialog"
         aria-modal="false"
         aria-labelledby={glossaryTitleId}
-        aria-hidden={!isOpen}
         sx={{
           position: "fixed",
           bottom: position.bottom + 76, // Just above the button (64px button height + 12px gap)

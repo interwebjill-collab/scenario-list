@@ -118,7 +118,7 @@ export function ViewModeControls() {
           >
             {/* List view - active */}
             <Tooltip title="List view (active)" arrow>
-              <IconButton sx={buttonSx(true)}>
+              <IconButton sx={buttonSx(true)} aria-label="List view (active)">
                 <ViewListIcon sx={{ fontSize: "1.5rem" }} />
               </IconButton>
             </Tooltip>
@@ -126,7 +126,11 @@ export function ViewModeControls() {
             {/* Map view - disabled in code sample */}
             <Tooltip title="Map view (not available in code sample)" arrow>
               <span>
-                <IconButton disabled sx={disabledButtonSx}>
+                <IconButton
+                  disabled
+                  sx={disabledButtonSx}
+                  aria-label="Map view (not available in code sample)"
+                >
                   <Image
                     src="/images/icons/map.svg"
                     alt="Map view"
@@ -144,7 +148,11 @@ export function ViewModeControls() {
               arrow
             >
               <span>
-                <IconButton disabled sx={disabledButtonSx}>
+                <IconButton
+                  disabled
+                  sx={disabledButtonSx}
+                  aria-label="Comparison view (not available in code sample)"
+                >
                   <CompareArrowsIcon sx={{ fontSize: "1.5rem" }} />
                 </IconButton>
               </span>

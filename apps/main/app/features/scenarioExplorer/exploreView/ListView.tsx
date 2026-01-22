@@ -159,6 +159,8 @@ export default function ListView({ compact = false }: ListViewProps) {
 
   const strategyGridProps = {
     getChartDataForScenario,
+    // WCAG 4.1.2: Pass score data for accessible tooltip display
+    allScoreData,
     outcomeNames: outcomeNames || [],
     scenarios: sortedScenarios,
     highlightedScenarios: matchingScenarioIds,

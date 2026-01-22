@@ -13,7 +13,7 @@
  * @see layoutConfig.ts for spacing constant documentation
  */
 
-import React from "react"
+import React, { useCallback } from "react"
 import { Box, useTheme } from "@repo/ui/mui"
 import type {
   ChartDataPoint,
@@ -22,6 +22,7 @@ import type {
 } from "../../scenarios/components/shared"
 import { StrategyGridRow } from "./StrategyGridRow"
 import type { LayoutMode } from "./StrategyGridHeader"
+import type { TooltipScenarioContext } from "../../tooltips/useTierTooltipState"
 
 export interface StrategyGridContentProps {
   /** Scenarios to display */
@@ -62,8 +63,14 @@ export interface StrategyGridContentProps {
   isAlignedGrid: boolean
   /** Toggle scenario selection */
   onToggleScenario: (scenarioId: string) => void
-  /** Toggle tooltip */
+  /** Toggle tooltip (basic - no scenario context) */
   onTooltipToggle: (name: string, anchor: HTMLElement) => void
+  /** Toggle tooltip with scenario context (for accessibility) */
+  onTooltipToggleWithContext?: (
+    name: string,
+    anchor: HTMLElement,
+    context: TooltipScenarioContext,
+  ) => void
   /** Sort change handler */
   onSortChange?: (outcome: string | null, direction: "asc" | "desc") => void
 }
@@ -92,6 +99,7 @@ export function StrategyGridContent({
   isAlignedGrid,
   onToggleScenario,
   onTooltipToggle,
+  onTooltipToggleWithContext,
   onSortChange,
 }: StrategyGridContentProps) {
   const theme = useTheme()
@@ -100,6 +108,28 @@ export function StrategyGridContent({
   const displayScenarios = showOnlyChosen
     ? scenarios.filter((s) => selectedScenarios.includes(s.scenarioId))
     : scenarios
+
+  // Create context-aware tooltip handler for a specific scenario
+  // Includes chart data for accurate tier display in tooltips
+  const createTooltipHandler = useCallback(
+    (scenario: ScenarioForDisplay) =>
+      (name: string, anchor: HTMLElement) => {
+        if (onTooltipToggleWithContext) {
+          // Get chart data for this specific outcome to pass to tooltip
+          const scenarioChartData = getChartDataForScenario(scenario.scenarioId)
+          const outcomeChartData = scenarioChartData[name]
+
+          onTooltipToggleWithContext(name, anchor, {
+            scenarioId: scenario.scenarioId,
+            scenarioLabel: scenario.label,
+            chartData: outcomeChartData,
+          })
+        } else {
+          onTooltipToggle(name, anchor)
+        }
+      },
+    [onTooltipToggle, onTooltipToggleWithContext, getChartDataForScenario],
+  )
 
   return (
     <>
@@ -117,6 +147,7 @@ export function StrategyGridContent({
         const rows: React.ReactNode[] = []
 
         // Main scenario row
+        // Use context-aware tooltip handler to include scenario info for accessibility
         rows.push(
           <StrategyGridRow
             key={scenario.scenarioId}
@@ -137,7 +168,7 @@ export function StrategyGridContent({
             glyphSize={glyphSize}
             isAlignedGrid={isAlignedGrid}
             onToggleScenario={onToggleScenario}
-            onTooltipToggle={onTooltipToggle}
+            onTooltipToggle={createTooltipHandler(scenario)}
             onSortChange={onSortChange}
           />,
         )

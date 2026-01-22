@@ -35,6 +35,7 @@ import { StrategyGridContent } from "./StrategyGridContent"
  */
 const StrategyGrid = React.memo(function StrategyGridComponent({
   getChartDataForScenario,
+  allScoreData,
   outcomeNames,
   scenarios: scenariosProp,
   highlightedScenarios,
@@ -83,7 +84,9 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
   const {
     openTooltip: activeTooltip,
     anchor: tooltipAnchor,
+    scenarioContext,
     handleToggleWithAnchor,
+    handleToggleWithContext,
     handleClose: closeTooltip,
     forceClose: forceCloseTooltip,
   } = useTierTooltipState()
@@ -126,11 +129,19 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
   return (
     <Box sx={{ position: "relative" }}>
       {/* Active outcome tooltip - rendered via Portal */}
+      {/* WCAG 4.1.2: Pass scenario score data and chart data for accessible text representation */}
       <TierTooltipPortal
         outcome={activeTooltip}
         position={tooltipPosition}
         onClose={closeTooltip}
         onForceClose={forceCloseTooltip}
+        scenarioScore={
+          scenarioContext && allScoreData && activeTooltip
+            ? allScoreData[scenarioContext.scenarioId]?.[activeTooltip]
+            : null
+        }
+        scenarioLabel={scenarioContext?.scenarioLabel}
+        chartData={scenarioContext?.chartData}
       />
 
       <Box
@@ -208,6 +219,7 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
             isAlignedGrid={isAlignedGrid}
             onToggleScenario={onToggleScenario}
             onTooltipToggle={handleToggleWithAnchor}
+            onTooltipToggleWithContext={handleToggleWithContext}
             onSortChange={onSortChange}
           />
         )}

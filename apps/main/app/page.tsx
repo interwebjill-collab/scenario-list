@@ -12,8 +12,13 @@ import { SkipLink } from "@repo/ui"
 export default function Home() {
   return (
     <ClientProviders>
-      {/* WCAG 2.4.1: Skip link MUST be first focusable element in DOM */}
+      {/* WCAG 2.4.1: Skip links MUST be first focusable elements in DOM */}
       <SkipLink />
+      <SkipLink
+        targetId="glossary-button"
+        label="Skip to glossary"
+        offsetIndex={1}
+      />
 
       {/* Glossary panel - opens from drawer when clicking terms like TUCP, SGMA */}
       <FloatingGlossary />

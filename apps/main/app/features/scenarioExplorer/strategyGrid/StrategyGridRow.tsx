@@ -9,7 +9,7 @@
  * @see layoutConfig.ts for spacing constant documentation
  */
 
-import React from "react"
+import React, { useRef } from "react"
 import { Box, Typography, useTheme, Checkbox } from "@repo/ui/mui"
 import {
   OutcomeGlyphItem,
@@ -93,9 +93,13 @@ export const StrategyGridRow = React.memo(function StrategyGridRow({
   // Get chart data for this scenario
   const scenarioChartData = getChartDataForScenario(scenario.scenarioId)
 
+  // Refs to store glyph container elements for tooltip anchoring
+  const glyphRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
   /**
    * Render a single outcome glyph item.
    * Handles all the display logic for labels, controls, and interaction.
+   * Clicking the glyph triggers the contextual tooltip with scenario data.
    */
   const renderOutcomeItem = (displayName: string, name: string) => {
     const chartData = scenarioChartData[displayName]
@@ -109,30 +113,43 @@ export const StrategyGridRow = React.memo(function StrategyGridRow({
     const showControlsBelowGlyph = !isAlignedGrid
 
     return (
-      <OutcomeGlyphItem
+      <Box
         key={displayName}
-        displayName={displayName}
-        name={name}
-        chartData={chartData}
-        isActive={isActive}
-        isSelected={isSelected}
-        isTooltipActive={activeTooltip === displayName}
-        size={glyphSize}
-        showLabel={showLabelBelowGlyph}
-        showInfoButton={showControlsBelowGlyph}
-        showSortButton={showControlsBelowGlyph && sortEnabled}
-        sortState={isSorted ? sortDirection : null}
-        onInfoClick={(e) => {
-          onTooltipToggle(displayName, e.currentTarget)
+        ref={(el: HTMLDivElement | null) => {
+          glyphRefs.current[displayName] = el
         }}
-        onSortToggle={(newState) => {
-          if (newState === null) {
-            onSortChange?.(null, "asc")
-          } else {
-            onSortChange?.(displayName, newState)
-          }
-        }}
-      />
+      >
+        <OutcomeGlyphItem
+          displayName={displayName}
+          name={name}
+          chartData={chartData}
+          isActive={isActive}
+          isSelected={isSelected}
+          isTooltipActive={activeTooltip === displayName}
+          size={glyphSize}
+          showLabel={showLabelBelowGlyph}
+          showInfoButton={showControlsBelowGlyph}
+          showSortButton={showControlsBelowGlyph && sortEnabled}
+          sortState={isSorted ? sortDirection : null}
+          // Click glyph to open contextual tooltip
+          onGlyphClick={() => {
+            const anchor = glyphRefs.current[displayName]
+            if (anchor) {
+              onTooltipToggle(displayName, anchor)
+            }
+          }}
+          onInfoClick={(e) => {
+            onTooltipToggle(displayName, e.currentTarget)
+          }}
+          onSortToggle={(newState) => {
+            if (newState === null) {
+              onSortChange?.(null, "asc")
+            } else {
+              onSortChange?.(displayName, newState)
+            }
+          }}
+        />
+      </Box>
     )
   }
 

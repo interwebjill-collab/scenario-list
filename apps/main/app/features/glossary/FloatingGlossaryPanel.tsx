@@ -263,12 +263,20 @@ export function FloatingGlossaryPanel({
           </IconButton>
         </Box>
 
-        {/* Content */}
+        {/* Content - WCAG 2.1.1: Scrollable region is focusable for keyboard scrolling */}
         <Box
+          tabIndex={isOpen ? 0 : -1}
+          role="region"
+          aria-label="Glossary terms"
           sx={{
             flex: 1,
             overflowY: "auto",
             padding: theme.space.section.sm,
+            // WCAG 2.4.7: Focus visible styles for scrollable region
+            "&:focus-visible": {
+              outline: `2px solid ${theme.palette.blue.bright}`,
+              outlineOffset: "-2px",
+            },
           }}
         >
           <Stack spacing={theme.space.gap.lg}>

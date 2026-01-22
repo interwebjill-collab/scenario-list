@@ -72,6 +72,8 @@ export interface OutcomeGlyphItemProps {
   showSortButton?: boolean
   /** Current sort state for this outcome */
   sortState?: "asc" | "desc" | null
+  /** Called when glyph is clicked (triggers contextual tooltip) */
+  onGlyphClick?: () => void
   /** Called when info button is clicked */
   onInfoClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   /** Called when sort state changes */
@@ -91,6 +93,7 @@ export function OutcomeGlyphItem({
   showInfoButton = true,
   showSortButton = false,
   sortState,
+  onGlyphClick,
   onInfoClick,
   onSortToggle,
 }: OutcomeGlyphItemProps) {
@@ -127,6 +130,9 @@ export function OutcomeGlyphItem({
 
   const variant = isSingleValueTier(chartData) ? "dots" : "bars"
 
+  // Glyph is clickable when active and has a click handler
+  const isClickable = isActive && !!onGlyphClick
+
   return (
     <Box
       sx={{
@@ -134,14 +140,37 @@ export function OutcomeGlyphItem({
         flexDirection: "column",
         alignItems: "center",
         gap: theme.space.gap.sm,
+        cursor: isClickable ? "pointer" : "default",
         padding: theme.space.component.sm,
         borderRadius: theme.borderRadius.sm,
-        transition: "opacity 0.2s ease",
+        transition: "opacity 0.2s ease, background-color 0.2s ease",
         opacity: isActive ? 1 : 0.5,
         border: isSelected ? theme.border.active : "2px solid transparent",
         minWidth: 0,
         overflow: "hidden",
+        "&:hover": {
+          backgroundColor: isClickable ? theme.palette.grey[100] : "transparent",
+        },
+        "&:focus-visible": {
+          outline: `2px solid ${theme.palette.blue.bright}`,
+          outlineOffset: "2px",
+        },
       }}
+      onClick={isClickable ? onGlyphClick : undefined}
+      // WCAG 2.1.1: Make clickable glyphs keyboard accessible
+      tabIndex={isClickable ? 0 : undefined}
+      role={isClickable ? "button" : undefined}
+      aria-label={isClickable ? `View details for ${displayName}` : undefined}
+      onKeyDown={
+        isClickable
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault()
+                onGlyphClick?.()
+              }
+            }
+          : undefined
+      }
     >
       {/* Glyph or placeholder */}
       {isActive ? (

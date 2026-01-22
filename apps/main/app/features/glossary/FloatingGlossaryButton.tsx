@@ -103,6 +103,7 @@ export function FloatingGlossaryButton({
 
   return (
     <Box
+      id="glossary-button"
       component="button"
       type="button"
       role="button"

@@ -41,16 +41,35 @@ interface SkipLinkProps {
    */
   targetId?: string
   /**
+   * Link text displayed when focused
+   * @default "Skip to main content"
+   */
+  label?: string
+  /**
    * z-index for the skip link when visible
    * Should be higher than any fixed headers
    * @default 10000
    */
   zIndex?: number
+  /**
+   * Vertical offset from top when multiple skip links are stacked
+   * Each index adds ~48px (link height + gap)
+   * @default 0
+   */
+  offsetIndex?: number
+  /**
+   * Optional callback when link is activated
+   * Use for targets that need special handling (e.g., opening a panel)
+   */
+  onActivate?: () => void
 }
 
 export function SkipLink({
   targetId = "main-content",
+  label = "Skip to main content",
   zIndex = 10000,
+  offsetIndex = 0,
+  onActivate,
 }: SkipLinkProps) {
   const theme = useTheme()
 
@@ -59,6 +78,13 @@ export function SkipLink({
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault()
+
+      // If custom activation handler provided, call it instead of default behavior
+      if (onActivate) {
+        onActivate()
+        return
+      }
+
       const target = document.getElementById(targetId)
       if (target) {
         // WCAG 2.3.3: Respect user's motion preferences
@@ -75,8 +101,12 @@ export function SkipLink({
         target.focus({ preventScroll: true })
       }
     },
-    [targetId],
+    [targetId, onActivate],
   )
+
+  // Calculate top position based on offset index
+  // Each link is ~48px tall (12px padding * 2 + line height + 8px gap)
+  const topPosition = 8 + offsetIndex * 56
 
   return (
     <Box
@@ -95,7 +125,7 @@ export function SkipLink({
         // Visible when focused
         "&:focus": {
           position: "fixed",
-          top: 8,
+          top: topPosition,
           left: 8,
           width: "auto",
           height: "auto",
@@ -111,7 +141,7 @@ export function SkipLink({
         },
       }}
     >
-      Skip to main content
+      {label}
     </Box>
   )
 }

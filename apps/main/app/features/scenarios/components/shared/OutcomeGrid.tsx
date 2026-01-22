@@ -42,8 +42,6 @@ export interface OutcomeGridProps {
   sortDirection?: "asc" | "desc"
   /** Glyph size override */
   size?: number
-  /** Called when a glyph is clicked */
-  onGlyphClick?: (outcome: string) => void
   /** Called when info button is clicked */
   onInfoClick?: (
     outcome: string,
@@ -65,7 +63,6 @@ export function OutcomeGrid({
   sortBy,
   sortDirection = "asc",
   size,
-  onGlyphClick,
   onInfoClick,
   onSortChange,
 }: OutcomeGridProps) {
@@ -106,7 +103,6 @@ export function OutcomeGrid({
         showInfoButton={showInfoButtons}
         showSortButton={showSortButtons}
         sortState={isSorted ? sortDirection : null}
-        onGlyphClick={() => onGlyphClick?.(outcome)}
         onInfoClick={(e) => onInfoClick?.(outcome, e)}
         onSortToggle={(newState) => {
           if (newState === null) {

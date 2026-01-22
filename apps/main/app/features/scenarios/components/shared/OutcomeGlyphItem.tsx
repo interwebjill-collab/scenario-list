@@ -72,8 +72,6 @@ export interface OutcomeGlyphItemProps {
   showSortButton?: boolean
   /** Current sort state for this outcome */
   sortState?: "asc" | "desc" | null
-  /** Called when glyph is clicked */
-  onGlyphClick?: () => void
   /** Called when info button is clicked */
   onInfoClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   /** Called when sort state changes */
@@ -93,7 +91,6 @@ export function OutcomeGlyphItem({
   showInfoButton = true,
   showSortButton = false,
   sortState,
-  onGlyphClick,
   onInfoClick,
   onSortToggle,
 }: OutcomeGlyphItemProps) {
@@ -137,19 +134,14 @@ export function OutcomeGlyphItem({
         flexDirection: "column",
         alignItems: "center",
         gap: theme.space.gap.sm,
-        cursor: isActive ? "pointer" : "default",
         padding: theme.space.component.sm,
         borderRadius: theme.borderRadius.sm,
-        transition: "opacity 0.2s ease, background-color 0.2s ease",
+        transition: "opacity 0.2s ease",
         opacity: isActive ? 1 : 0.5,
         border: isSelected ? theme.border.active : "2px solid transparent",
         minWidth: 0,
         overflow: "hidden",
-        "&:hover": {
-          backgroundColor: isActive ? theme.palette.grey[100] : "transparent",
-        },
       }}
-      onClick={isActive ? onGlyphClick : undefined}
     >
       {/* Glyph or placeholder */}
       {isActive ? (

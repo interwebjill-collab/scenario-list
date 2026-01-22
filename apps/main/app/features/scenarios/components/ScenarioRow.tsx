@@ -59,7 +59,6 @@ export interface ScenarioRowProps {
   sortDirection?: "asc" | "desc"
   /** Callbacks */
   onToggleSelect?: () => void
-  onOutcomeClick?: (outcome: string) => void
   onOutcomeInfoClick?: (
     outcome: string,
     e: React.MouseEvent<HTMLButtonElement>,
@@ -86,7 +85,6 @@ export function ScenarioRow({
   sortBy,
   sortDirection = "asc",
   onToggleSelect,
-  onOutcomeClick,
   onOutcomeInfoClick,
   onSortChange,
   iconSize = "md",
@@ -127,11 +125,6 @@ export function ScenarioRow({
         showInfoButton={true}
         showSortButton={!!onSortChange}
         sortState={isSorted ? sortDirection : null}
-        onGlyphClick={() => {
-          if (isActive && onOutcomeClick) {
-            onOutcomeClick(displayName)
-          }
-        }}
         onInfoClick={(e) => onOutcomeInfoClick?.(name, e)}
         onSortToggle={(newState) => {
           if (newState === null) {

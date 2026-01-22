@@ -39,8 +39,6 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
   scenarios: scenariosProp,
   highlightedScenarios,
   showSearchDivider = false,
-  onOutcomeSelect,
-  onTierClick,
   onToggleScenario,
   selectedScenarios,
   selectedOutcomes,
@@ -107,28 +105,6 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
       setTooltipPosition(null)
     }
   }, [tooltipAnchor])
-
-  // =========================================================================
-  // Summary Panel State
-  // =========================================================================
-
-  // Track which scenarios have expanded summaries
-  const [expandedSummaries, setExpandedSummaries] = useState<
-    Record<string, string | null>
-  >({})
-
-  // Toggle summary for a scenario with a specific outcome
-  const toggleSummary = (scenarioId: string, outcome: string) => {
-    setExpandedSummaries((prev) => {
-      const currentOutcome = prev[scenarioId]
-      if (currentOutcome === outcome) {
-        const { [scenarioId]: _removed, ...rest } = prev
-        void _removed
-        return rest
-      }
-      return { ...prev, [scenarioId]: outcome }
-    })
-  }
 
   // =========================================================================
   // Derived Values
@@ -219,13 +195,11 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
             selectedScenarios={selectedScenarios}
             showOnlyChosen={showOnlyChosen}
             showDefinitions={showDefinitions}
-            showMapView={showMapView}
             compact={compact}
             layoutMode={layoutMode}
             outcomeNames={outcomeNames}
             getChartDataForScenario={getChartDataForScenario}
             selectedOutcomes={selectedOutcomes}
-            expandedSummaries={expandedSummaries}
             activeTooltip={activeTooltip}
             sortBy={sortBy ?? null}
             sortDirection={sortDirection}
@@ -233,9 +207,6 @@ const StrategyGrid = React.memo(function StrategyGridComponent({
             glyphSize={glyphSize}
             isAlignedGrid={isAlignedGrid}
             onToggleScenario={onToggleScenario}
-            onOutcomeSelect={onOutcomeSelect}
-            onTierClick={onTierClick}
-            onToggleSummary={toggleSummary}
             onTooltipToggle={handleToggleWithAnchor}
             onSortChange={onSortChange}
           />

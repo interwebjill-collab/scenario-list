@@ -20,8 +20,6 @@ export interface StrategyGridProps {
   showSearchDivider?: boolean
 
   // Events
-  onOutcomeSelect: (scenarioId: string, outcome: string) => void
-  onTierClick?: (scenarioId: string, outcome: string) => void
   onToggleScenario: (scenarioId: string) => void
 
   // State (fully controlled)

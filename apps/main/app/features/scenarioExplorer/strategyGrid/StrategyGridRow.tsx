@@ -42,12 +42,8 @@ export interface StrategyGridRowProps {
   getChartDataForScenario: (
     scenarioId: string,
   ) => Record<string, ChartDataPoint[]>
-  /** Currently expanded summary outcome (if any) */
-  expandedSummaryOutcome: string | null
   /** Currently selected outcome for this scenario */
   selectedOutcome: string | null
-  /** Whether tier click handler exists */
-  hasTierClick: boolean
   /** Active tooltip outcome name */
   activeTooltip: string | null
   /** Current sort column */
@@ -62,12 +58,6 @@ export interface StrategyGridRowProps {
   isAlignedGrid: boolean
   /** Toggle scenario selection */
   onToggleScenario: (scenarioId: string) => void
-  /** Select an outcome */
-  onOutcomeSelect: (scenarioId: string, outcome: string) => void
-  /** Tier click handler */
-  onTierClick?: (scenarioId: string, outcome: string) => void
-  /** Toggle summary panel */
-  onToggleSummary: (scenarioId: string, outcome: string) => void
   /** Toggle tooltip with anchor */
   onTooltipToggle: (name: string, anchor: HTMLElement) => void
   /** Sort change handler */
@@ -87,9 +77,7 @@ export const StrategyGridRow = React.memo(function StrategyGridRow({
   showDefinitions,
   outcomeNames,
   getChartDataForScenario,
-  expandedSummaryOutcome,
   selectedOutcome,
-  hasTierClick,
   activeTooltip,
   sortBy,
   sortDirection,
@@ -97,9 +85,6 @@ export const StrategyGridRow = React.memo(function StrategyGridRow({
   glyphSize,
   isAlignedGrid,
   onToggleScenario,
-  onOutcomeSelect,
-  onTierClick,
-  onToggleSummary,
   onTooltipToggle,
   onSortChange,
 }: StrategyGridRowProps) {
@@ -115,9 +100,7 @@ export const StrategyGridRow = React.memo(function StrategyGridRow({
   const renderOutcomeItem = (displayName: string, name: string) => {
     const chartData = scenarioChartData[displayName]
     const isActive = chartData !== undefined && chartData.length > 0
-    const isSelected =
-      expandedSummaryOutcome === displayName ||
-      (selectedOutcome === displayName && hasTierClick)
+    const isSelected = selectedOutcome === displayName
     const isSorted = sortBy === displayName
 
     // In aligned grid mode, labels and controls are in the header row
@@ -139,13 +122,6 @@ export const StrategyGridRow = React.memo(function StrategyGridRow({
         showInfoButton={showControlsBelowGlyph}
         showSortButton={showControlsBelowGlyph && sortEnabled}
         sortState={isSorted ? sortDirection : null}
-        onGlyphClick={() => {
-          if (isActive) {
-            onOutcomeSelect(scenario.scenarioId, displayName)
-            if (onTierClick) onTierClick(scenario.scenarioId, displayName)
-            onToggleSummary(scenario.scenarioId, displayName)
-          }
-        }}
         onInfoClick={(e) => {
           onTooltipToggle(displayName, e.currentTarget)
         }}

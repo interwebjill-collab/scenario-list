@@ -20,13 +20,9 @@ import {
 
 interface ListViewProps {
   compact?: boolean
-  onTierClick?: (scenarioId: string, outcome: string) => void
 }
 
-export default function ListView({
-  compact = false,
-  onTierClick,
-}: ListViewProps) {
+export default function ListView({ compact = false }: ListViewProps) {
   const theme = useTheme()
   const {
     getChartDataForScenario,
@@ -129,14 +125,6 @@ export default function ListView({
     toggleScenario(scenarioId)
   }
 
-  const [localSelectedOutcomes, setLocalSelectedOutcomes] = React.useState<
-    Record<string, string>
-  >({})
-
-  const handleOutcomeSelect = (scenarioId: string, outcome: string) => {
-    setLocalSelectedOutcomes((prev) => ({ ...prev, [scenarioId]: outcome }))
-  }
-
   const isLoading = dataLoading || scenariosLoading
   const error = dataError || (scenariosError ? scenariosError.message : null)
 
@@ -175,11 +163,9 @@ export default function ListView({
     scenarios: sortedScenarios,
     highlightedScenarios: matchingScenarioIds,
     showSearchDivider: hasSearchResults,
-    onOutcomeSelect: handleOutcomeSelect,
-    onTierClick,
     onToggleScenario: handleToggleScenario,
     selectedScenarios,
-    selectedOutcomes: localSelectedOutcomes,
+    selectedOutcomes: {} as Record<string, string | null>,
     showMapView: false,
     showOnlyChosen,
     showDefinitions,

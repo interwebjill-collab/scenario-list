@@ -614,6 +614,8 @@ const theme = createTheme({
   // This generates CSS custom properties (--mui-*) for theme values,
   // allowing Server Components to reference theme values as static strings
   cssVariables: true,
+  // Force light mode - prevent auto-switching based on prefers-color-scheme
+  colorSchemes: { light: true, dark: false },
   ...baseTheme,
   // Custom layout values
   layout: themeValues.layout,
@@ -624,6 +626,8 @@ const theme = createTheme({
   // Palette - California Water theme (MUI integration)
   // Custom colors spread from themeValues, MUI standard colors mapped
   palette: {
+    // Force light mode - prevent iOS/Android dark mode from affecting the site
+    mode: "light",
     // Spread custom palette groups directly
     ...themeValues.palette,
 

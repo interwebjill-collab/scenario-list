@@ -13,6 +13,7 @@ import ListView from "./exploreView/ListView"
 import SearchBar from "./components/SearchBar"
 import { ViewModeControls } from "./components/ViewModeControls"
 import SelectionBanner from "./components/SelectionBanner"
+import KeyboardShortcuts from "./components/KeyboardShortcuts"
 
 export default function ScenarioExplorer() {
   const theme = useTheme()
@@ -86,6 +87,9 @@ export default function ScenarioExplorer() {
       >
         <ListView />
       </Box>
+
+      {/* Global keyboard shortcuts handler */}
+      <KeyboardShortcuts />
     </Box>
   )
 }

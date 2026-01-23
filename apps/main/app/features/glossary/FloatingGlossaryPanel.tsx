@@ -49,6 +49,7 @@ export function FloatingGlossaryPanel({
 }: FloatingGlossaryPanelProps) {
   const theme = useTheme()
   const termRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const contentRef = useRef<HTMLDivElement>(null)
   const [internalSelectedTerm, setInternalSelectedTerm] = useState<
     string | undefined
   >(selectedTerm)
@@ -84,6 +85,16 @@ export function FloatingGlossaryPanel({
     document.addEventListener("keydown", handleKeyDown)
     return () => document.removeEventListener("keydown", handleKeyDown)
   }, [handleKeyDown])
+
+  // WCAG 2.4.3: Focus content area when panel opens for keyboard scrolling
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      // Small delay to allow animation to start
+      setTimeout(() => {
+        contentRef.current?.focus()
+      }, 100)
+    }
+  }, [isOpen])
 
   // Function to handle clicking on a term link within the glossary
   const handleTermClick = (termName: string) => {
@@ -265,6 +276,7 @@ export function FloatingGlossaryPanel({
 
         {/* Content - WCAG 2.1.1: Scrollable region is focusable for keyboard scrolling */}
         <Box
+          ref={contentRef}
           tabIndex={isOpen ? 0 : -1}
           role="region"
           aria-label="Glossary terms"

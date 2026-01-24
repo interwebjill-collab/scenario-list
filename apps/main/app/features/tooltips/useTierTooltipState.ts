@@ -51,7 +51,8 @@ export function useTierTooltipState(options: UseTierTooltipStateOptions = {}) {
 
   const [openTooltip, setOpenTooltip] = useState<string | null>(null)
   const [anchor, setAnchor] = useState<HTMLElement | null>(null)
-  const [scenarioContext, setScenarioContext] = useState<TooltipScenarioContext | null>(null)
+  const [scenarioContext, setScenarioContext] =
+    useState<TooltipScenarioContext | null>(null)
 
   // Track the timestamp of the last toggle to ignore immediate click-away events
   const lastToggleTimeRef = useRef<number>(0)
@@ -112,7 +113,11 @@ export function useTierTooltipState(options: UseTierTooltipStateOptions = {}) {
   // Handle toggle with anchor and scenario context - for accessibility
   // This allows the tooltip to display scenario-specific data
   const handleToggleWithContext = useCallback(
-    (id: string, anchorElement: HTMLElement, context: TooltipScenarioContext) => {
+    (
+      id: string,
+      anchorElement: HTMLElement,
+      context: TooltipScenarioContext,
+    ) => {
       lastToggleTimeRef.current = Date.now()
 
       setOpenTooltip((prev) => {

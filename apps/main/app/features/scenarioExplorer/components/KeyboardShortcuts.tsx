@@ -157,14 +157,13 @@ export function KeyboardShortcuts() {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              mb: theme.space.component.xl,
+              mb: theme.space.component.md,
             }}
           >
             <Typography
               id="keyboard-shortcuts-title"
               variant="h6"
               component="h2"
-              sx={{ fontWeight: 600 }}
             >
               Keyboard Shortcuts
             </Typography>
@@ -194,8 +193,8 @@ export function KeyboardShortcuts() {
               >
                 <Typography
                   component="dd"
-                  variant="body2"
-                  sx={{ m: 0, color: theme.palette.text.primary }}
+                  variant="storyBody"
+                  sx={{ m: 0 }}
                 >
                   {shortcut.description}
                 </Typography>
@@ -208,9 +207,11 @@ export function KeyboardShortcuts() {
                   }}
                 >
                   {shortcut.keys.map((key, keyIndex) => (
-                    <Box
+                    <Typography
                       key={keyIndex}
+                      variant="caption"
                       component="kbd"
+                      fontWeight="medium"
                       sx={{
                         display: "inline-flex",
                         alignItems: "center",
@@ -221,34 +222,16 @@ export function KeyboardShortcuts() {
                         backgroundColor: theme.palette.grey[100],
                         border: `1px solid ${theme.palette.grey[300]}`,
                         borderRadius: theme.borderRadius.sm,
-                        fontSize: "0.75rem",
-                        fontFamily: "inherit",
-                        fontWeight: 500,
-                        color: theme.palette.text.primary,
                         boxShadow: `0 1px 0 ${theme.palette.grey[400]}`,
                       }}
                     >
                       {key}
-                    </Box>
+                    </Typography>
                   ))}
                 </Box>
               </Box>
             ))}
           </Box>
-
-          {/* Footer hint */}
-          <Typography
-            variant="caption"
-            sx={{
-              display: "block",
-              mt: theme.space.component.xl,
-              color: theme.palette.text.secondary,
-              textAlign: "center",
-            }}
-          >
-            Press <kbd style={{ fontWeight: 600 }}>?</kbd> anytime to see this
-            help
-          </Typography>
         </Box>
       </ClickAwayListener>
     </Portal>

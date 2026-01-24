@@ -57,6 +57,9 @@ importers:
       '@re-dev/react-truncate':
         specifier: ^0.5.2
         version: 0.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@repo/data':
+        specifier: workspace:*
+        version: link:../../packages/data
       '@repo/motion':
         specifier: workspace:*
         version: link:../../packages/motion
@@ -82,6 +85,22 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+
+  packages/data:
+    dependencies:
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.1.0
+      swr:
+        specifier: ^2.2.5
+        version: 2.3.6(react@19.1.0)
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.0.10
 
   packages/eslint-config:
     devDependencies:

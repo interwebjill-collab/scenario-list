@@ -15,6 +15,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@re-dev/react-truncate": "^0.5.2",
+    "@repo/data": "workspace:*",
     "@repo/motion": "workspace:*",
     "@repo/state": "workspace:*",
     "@repo/ui": "workspace:*",

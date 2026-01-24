@@ -6,6 +6,7 @@
 import { StrictMode } from "react"
 import type { Metadata } from "next"
 import { ThemeRegistry } from "@repo/ui/themes/ThemeRegistry"
+import { DataProvider } from "@repo/data/providers"
 
 export const metadata: Metadata = {
   title: "Scenario Explorer - Code Sample",
@@ -22,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <StrictMode>
-          <ThemeRegistry>{children}</ThemeRegistry>
+          <DataProvider>
+            <ThemeRegistry>{children}</ThemeRegistry>
+          </DataProvider>
         </StrictMode>
       </body>
     </html>

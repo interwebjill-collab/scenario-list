@@ -103,6 +103,7 @@ export function useTierTooltipState(options: UseTierTooltipStateOptions = {}) {
         } else {
           // No tooltip open - just open
           setAnchor(anchorElement)
+          setScenarioContext(null)
           return id
         }
       })

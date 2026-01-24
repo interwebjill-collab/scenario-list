@@ -345,19 +345,6 @@ export default function TierTooltipContent({
                 }}
               />
               <Typography variant="dashboard" component="span">
-                {isCurrentTier && (
-                  <Box
-                    component="span"
-                    sx={{
-                      display: "inline-block",
-                      mr: 0.5,
-                      fontWeight: theme.typography.fontWeightBold,
-                    }}
-                    aria-hidden="true"
-                  >
-                    &rarr;
-                  </Box>
-                )}
                 {formatTierText(
                   (
                     outcomeTierValues as Record<

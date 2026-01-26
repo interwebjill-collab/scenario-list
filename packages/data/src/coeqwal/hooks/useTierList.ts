@@ -2,8 +2,6 @@
 
 /**
  * Hook for fetching the tier list
- *
- * The tier list is static data that rarely changes.
  */
 
 import useSWR from "swr"

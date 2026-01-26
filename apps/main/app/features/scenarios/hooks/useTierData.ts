@@ -1,6 +1,6 @@
-import { useMemo } from "react"
+import { useMemo, useEffect } from "react"
 import { useTheme } from "@repo/ui/mui"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
 import {
   useTierList,
   useTierMapping,
@@ -8,6 +8,7 @@ import {
   mapShortCodeToDisplayName,
 } from "@repo/data/coeqwal/hooks"
 import { fetchAllScenarioTiers } from "@repo/data/coeqwal"
+import { CACHE_KEYS } from "@repo/data/cache"
 import type { ScenarioTiersResponse, TierScores } from "@repo/data/coeqwal"
 import {
   fetchScenarioTiers,
@@ -264,6 +265,7 @@ export function useScenarioTiers(scenarioId: string | null) {
 
 export function useMultipleScenarioTiers() {
   const theme = useTheme()
+  const { mutate } = useSWRConfig()
 
   // Use shared hooks for scenarios, tier list, and mapping (cached, deduplicated)
   const {
@@ -294,6 +296,16 @@ export function useMultipleScenarioTiers() {
     scenarioIds.length > 0 ? ["all-scenario-tiers", ...scenarioIds] : null,
     () => fetchAllScenarioTiers(scenarioIds),
   )
+
+  // Pre-populate per-scenario cache entries after bulk fetch
+  // This allows useScenarioTiers to find cached data when navigating to detail view
+  useEffect(() => {
+    if (allScenariosData) {
+      Object.entries(allScenariosData).forEach(([scenarioId, tierData]) => {
+        mutate(CACHE_KEYS.scenarioTiers(scenarioId), tierData, false)
+      })
+    }
+  }, [allScenariosData, mutate])
 
   // Memoize theme colors to prevent recalculation
   const themeColors = useMemo(() => getThemeColorsForApi(theme), [theme])

@@ -1,5 +1,13 @@
 /**
  * Universal fetch wrapper with retry logic and error handling
+ *
+ * **Note:** This is a low-level utility for internal use.
+ * React component developers should use hooks from `@repo/data/coeqwal/hooks`:
+ * - `useTierList()` - fetch tier definitions
+ * - `useScenarios()` - fetch scenario list
+ * - `useTierMapping()` - get short_code -> name mapping
+ *
+ * This function is used internally by fetchers in `fetchers.ts`.
  */
 
 import { FetchError, type FetchOptions } from "./types"
@@ -32,9 +40,12 @@ function isRetryableStatus(status: number): boolean {
  *
  * @example
  * ```typescript
- * const data = await apiFetcher<UserData>("/users/123", {
- *   baseUrl: "https://api.example.com",
- *   timeout: 5000,
+ * // Used internally by fetchers - see fetchers.ts for real examples
+ * import { DEFAULT_API_BASE, ENDPOINTS } from "../coeqwal/api"
+ * import type { TierListItem } from "../coeqwal/types"
+ *
+ * const tiers = await apiFetcher<TierListItem[]>(ENDPOINTS.TIER_LIST, {
+ *   baseUrl: DEFAULT_API_BASE,
  * })
  * ```
  */

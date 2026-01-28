@@ -18,7 +18,7 @@ React components
 - **Deduplication**: Multiple components requesting the same data make only 1 API call
 - **Caching**: SWR caches responses with 60s deduplication window
 - **Type safety**: Typed fetchers and responses, i.e. no type assertions at consumer level
-- **Consistent error handling**: All hooks return `{ data, error, isLoading }`
+- **Consistent pattern**: All hooks return `{ <data>, isLoading, error }` where the data property name varies by hook
 
 ## Installation
 
@@ -53,7 +53,7 @@ export default function RootLayout({ children }) {
 }
 ```
 
-The DataProvider configures SWR with:
+The DataProvider configures SWR with our config:
 - 60-second deduplication window (our data is relatively static)
 - No revalidation on focus (same reason)
 - Revalidate on reconnect
@@ -62,12 +62,11 @@ The DataProvider configures SWR with:
 ### 2. Use hooks in components
 
 ```tsx
-import { useTiers, useTierMapping, useScenarios } from "@repo/data/coeqwal/hooks"
+import { useTiers, useScenarios } from "@repo/data/coeqwal/hooks"
 
 function MyComponent() {
-  const { data: tiers, isLoading, error } = useTiers()
-  const { mapping } = useTierMapping()
-  const { data: scenarios } = useScenarios()
+  const { tiers, isLoading, error } = useTiers()
+  const { scenarios } = useScenarios()
 
   if (isLoading) return <Spinner />
   if (error) return <Error message={error} />
@@ -85,16 +84,15 @@ App-level hooks combine data package hooks with local state and transformations.
 export function useScenarioTiers(scenarioId: string | null) {
   // Use shared hooks (cached, deduplicated)
   const { tiers } = useTiers()
-  const { tierMapping } = useTierMapping()
 
   // Fetch scenario-specific data
   const { data: scenarioData } = useSWR(...)
 
   // Transform API data for UI
   const chartData = useMemo(() => {
-    if (!scenarioData || !tierMapping) return {}
-    return processScenarioData(scenarioData, tierMapping, themeColors)
-  }, [scenarioData, tierMapping, themeColors])
+    if (!scenarioData || !tiers) return {}
+    return processScenarioData(scenarioData, tiers, themeColors)
+  }, [scenarioData, tiers, themeColors])
 
   return { chartData, outcomeNames, isLoading, error }
 }
@@ -135,10 +133,10 @@ const { data, isLoading, error } = useScenarioTiers("s0020")
 For potential server-side data fetching or building custom hooks:
 
 ```tsx
-import { fetchTierList, fetchScenarioTiers, fetchScenarios } from "@repo/data/coeqwal"
+import { fetchTierList, fetchScenarioTiers, fetchScenarioList } from "@repo/data/coeqwal"
 
 const tiers = await fetchTierList()
-const scenarios = await fetchScenarios()
+const scenarios = await fetchScenarioList()
 const scenarioData = await fetchScenarioTiers("s0020")
 ```
 
@@ -168,7 +166,8 @@ import type {
   ScenarioTiersResponse,  // Response from scenario tiers endpoint
   ScenarioListItem,    // Scenario metadata
   TierMapping,         // Record<string, string> for lookups
-  MultiValueTierData,  // Distribution data for multi-value tiers
+  MultiValueTier,      // Multi-value tier with name, type, data array, and total
+  MultiValueTierData,  // Distribution data for multi-value tiers (tier, value, normalized)
 } from "@repo/data/coeqwal"
 ```
 

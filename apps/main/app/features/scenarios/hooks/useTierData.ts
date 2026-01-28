@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react"
 import { useTheme } from "@repo/ui/mui"
 import useSWR, { useSWRConfig } from "swr"
 import {
-  useTierList,
+  useTiers,
   useTierMapping,
   useScenarios,
   mapShortCodeToDisplayName,
@@ -182,10 +182,10 @@ export function useScenarioTiers(scenarioId: string | null) {
 
   // Use shared hooks for tier list and mapping (cached, deduplicated)
   const {
-    tierList: allTiers,
+    tiers: allTiers,
     error: tiersError,
     isLoading: tiersLoading,
-  } = useTierList()
+  } = useTiers()
 
   const {
     tierMapping,
@@ -275,10 +275,10 @@ export function useMultipleScenarioTiers() {
   } = useScenarios()
 
   const {
-    tierList: allTiers,
+    tiers: allTiers,
     error: tiersError,
     isLoading: tiersLoading,
-  } = useTierList()
+  } = useTiers()
 
   const {
     tierMapping,

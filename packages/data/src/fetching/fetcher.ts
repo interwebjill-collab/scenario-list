@@ -3,7 +3,7 @@
  *
  * **Note:** This is a low-level utility for internal use.
  * React component developers should use hooks from `@repo/data/coeqwal/hooks`:
- * - `useTierList()` - fetch tier definitions
+ * - `useTiers()` - fetch tier definitions
  * - `useScenarios()` - fetch scenario list
  * - `useTierMapping()` - get short_code -> name mapping
  *

@@ -24,7 +24,7 @@
  * import type { TierListItem, ScenarioTiersResponse } from "@repo/data/coeqwal"
  *
  * // COEQWAL hooks (for React components)
- * import { useTierList, useTierMapping, useScenarios } from "@repo/data/coeqwal/hooks"
+ * import { useTiers, useTierMapping, useScenarios } from "@repo/data/coeqwal/hooks"
  * ```
  */
 

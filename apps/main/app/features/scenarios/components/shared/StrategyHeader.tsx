@@ -86,9 +86,9 @@ function DescriptionWithGlossaryLinks({
     [setDrawerContent, openDrawer],
   )
 
-  // Toggle styles for show more/less - now as buttons
+  // Toggle styles for show more/less
   const toggleButtonStyles = {
-    color: theme.palette.blue.bright,
+    color: theme.palette.blue.medium,
     fontStyle: "italic",
     cursor: "pointer",
     userSelect: "none" as const,

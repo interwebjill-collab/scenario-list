@@ -143,8 +143,7 @@ export function OutcomeGlyphItem({
         cursor: isClickable ? "pointer" : "default",
         padding: theme.space.component.sm,
         borderRadius: theme.borderRadius.sm,
-        transition: "opacity 0.2s ease, background-color 0.2s ease",
-        opacity: isActive ? 1 : 0.5,
+        transition: "background-color 0.2s ease",
         border: isSelected ? theme.border.active : "2px solid transparent",
         minWidth: 0,
         overflow: "hidden",
@@ -198,7 +197,7 @@ export function OutcomeGlyphItem({
           <Typography
             variant="outcomeLabel"
             sx={{
-              color: theme.palette.text.primary,
+              color: theme.palette.grey[700],
               px: theme.space.component.xs,
             }}
           >

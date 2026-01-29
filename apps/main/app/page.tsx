@@ -32,6 +32,9 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           outline: "none", // Remove focus outline when skip link targets this
+          maxWidth: "2048px", // Constrain width on ultra-large screens (4K, ultrawide)
+          width: "100%",
+          margin: "0 auto", // Center on large screens
         }}
       >
         <ScenarioExplorer />

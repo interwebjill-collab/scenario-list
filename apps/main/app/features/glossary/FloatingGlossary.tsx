@@ -8,6 +8,7 @@
  */
 
 import { useState, useRef, useEffect } from "react"
+import { useTheme, useMediaQuery } from "@repo/ui/mui"
 import { useDrawerStore } from "@repo/state/drawer"
 import { FloatingGlossaryButton } from "./FloatingGlossaryButton"
 import { FloatingGlossaryPanel } from "./FloatingGlossaryPanel"
@@ -26,6 +27,9 @@ interface Position {
  * Main floating glossary component that manages the button and panel
  */
 export function FloatingGlossary({ selectedTerm }: FloatingGlossaryProps) {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
   const [isOpen, setIsOpen] = useState(false)
   const [position, setPosition] = useState<Position>({ bottom: 32, right: 32 })
   const [isDragging, setIsDragging] = useState(false)
@@ -83,6 +87,9 @@ export function FloatingGlossary({ selectedTerm }: FloatingGlossaryProps) {
   }
 
   const handleDragStart = (e: React.MouseEvent) => {
+    // Disable dragging on mobile - no horizontal repositioning on small screens
+    if (isMobile) return
+
     // Only start drag if not clicking to toggle
     if (e.button !== 0) return
 
@@ -142,6 +149,7 @@ export function FloatingGlossary({ selectedTerm }: FloatingGlossaryProps) {
         selectedTerm={currentSelectedTerm}
         position={position}
         isOnLeftHalf={isOnLeftHalf}
+        isMobile={isMobile}
       />
     </>
   )

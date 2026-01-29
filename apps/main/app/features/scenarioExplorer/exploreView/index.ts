@@ -1,5 +1,6 @@
 /**
- * exploreView - barrel exports for explore view sub-feature
+ * exploreView - barrel exports for explore view sub-features
+ * truncated for sample
  */
 
 export { default } from "./ListView"

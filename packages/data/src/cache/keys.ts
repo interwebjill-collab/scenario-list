@@ -40,21 +40,6 @@ export const CACHE_KEYS = {
    */
   allScenarioTiers: (scenarioIds: string[]) =>
     ["all-scenario-tiers", ...scenarioIds] as const,
-
-  /**
-   * Lazy-loaded scenario tiers (subset of all scenarios)
-   * @param scenarioIds - Array of loaded scenario IDs
-   */
-  lazyScenarioTiers: (scenarioIds: string[]) =>
-    ["lazy-scenario-tiers", ...scenarioIds] as const,
-
-  /**
-   * Tier location data for map visualization
-   * @param scenarioId - Scenario ID
-   * @param tierCode - Tier code (e.g., "AG_REV")
-   */
-  tierLocations: (scenarioId: string, tierCode: string) =>
-    `/tier-map/${scenarioId}/${tierCode}/locations`,
 } as const
 
 /**
@@ -70,5 +55,3 @@ export type StaticCacheKey =
 export type DynamicCacheKey =
   | ReturnType<typeof CACHE_KEYS.scenarioTiers>
   | ReturnType<typeof CACHE_KEYS.allScenarioTiers>
-  | ReturnType<typeof CACHE_KEYS.lazyScenarioTiers>
-  | ReturnType<typeof CACHE_KEYS.tierLocations>

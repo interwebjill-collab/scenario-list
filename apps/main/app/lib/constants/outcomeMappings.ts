@@ -5,6 +5,10 @@
  * - API short codes (e.g., "DELTA_ECO")
  * - Display names (e.g., "Delta estuary ecology")
  * - Metric IDs (e.g., "env-delta-ecology-tier")
+ * 
+* This content is currently under review by the project team and is in flux, hence the messyness.
+* Final content will streamline variations.
+
  *
  * Strategy/scenario mappings are now in content/scenarios.ts
  *

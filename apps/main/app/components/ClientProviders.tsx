@@ -5,6 +5,8 @@
  *
  * Note: ThemeRegistry is used instead of ThemeProvider because it handles
  * Emotion cache setup for Next.js App Router (SSR compatibility).
+ *
+ * This file is truncated for sample.
  */
 
 import { ThemeRegistry } from "@repo/ui/themes/ThemeRegistry"

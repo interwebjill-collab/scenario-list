@@ -4,7 +4,7 @@
  * This file provides UI-specific metadata (themes, icons, user-friendly labels)
  * for scenarios. The API provides technical details (scenario IDs, short codes).
  *
- * Use useScenarioList() hook to get enriched scenario data that combines
+ * Use useScenarios() hook to get enriched scenario data that combines
  * API data with this local metadata.
  *
  * All identifiers use scenario_id (e.g., "s0020")

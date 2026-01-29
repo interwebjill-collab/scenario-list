@@ -1,10 +1,11 @@
 "use client"
 
 /**
- * FloatingGlossaryPanel - Floating glossary sidebar
+ * FloatingGlossaryPanel - Floating glossary popup panel
  *
  * Displays searchable glossary terms with definitions.
- * Opens as a floating panel from the glossary button.
+ * Opens as a scrollable, floating panel from the glossary button.
+ * Modal in mobile view.
  */
 
 import {
